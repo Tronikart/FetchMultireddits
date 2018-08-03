@@ -116,7 +116,7 @@ def fetchMulti(multi, max_posts):
 			return posts['urls']
 		else:
 			page = get_next_page_params(request['url'])
-			request = handleRedditRequest(url + 'top/.json?sort=top&t=hour&count=' + page['count'] + "&after=" + page['after'])
+			request = handleRedditRequest(url + 'top/.json?sort=top&t=hour&count=' + str(page['count']) + "&after=" + page['after'])
 			# Second page and last page go through
 			if not request['timeout']:
 				posts = go_through_posts(request, max_posts, posts['posts'], posts['urls'])
@@ -136,7 +136,7 @@ def fetchMulti(multi, max_posts):
 								# going until either done or no more next pages
 								page = get_next_page_params(request['url'])
 								if page['after']:
-									request = handleRedditRequest(url + 'top/.json?sort=top&t=day&count=' + page['count'] + '&after=' + page['after'])
+									request = handleRedditRequest(url + 'top/.json?sort=top&t=day&count=' + str(page['count']) + '&after=' + page['after'])
 									if not request['timeout']:
 										posts = go_through_posts(request, max_posts, posts['posts'], posts['urls'])
 										if posts['done']:
@@ -144,7 +144,7 @@ def fetchMulti(multi, max_posts):
 										else:
 											continue
 									else:
-										requests.get("https://api.telegram.org/bot" + botkey + "/sendMessage", {chat_id : adminid, text : "Fetching " + multi + " timedout."})
+										requests.get("https://api.telegram.org/bot" + botkey + "/sendMessage", {'chat_id' : adminid, 'text' : "Fetching " + multi + " timedout."})
 								else:
 									break
 							# Hot top
@@ -160,7 +160,7 @@ def fetchMulti(multi, max_posts):
 										# going until done or somehow no more pages
 										page = get_next_page_params(request['url'])
 										if page['after']:
-											request = handleRedditRequest(url + '.json?count=' + page['count'] + '&after=' + page['after'])
+											request = handleRedditRequest(url + '.json?count=' + str(page['count']) + '&after=' + page['after'])
 											if not request['timeout']:
 												posts = go_through_posts(request, max_posts, posts['posts'], posts['urls'])
 												if posts['done']:
@@ -168,23 +168,24 @@ def fetchMulti(multi, max_posts):
 												else:
 													continue
 											else:
-												requests.get("https://api.telegram.org/bot" + botkey + "/sendMessage", {chat_id : adminid, text : "Fetching " + multi + " timedout."})
+												requests.get("https://api.telegram.org/bot" + botkey + "/sendMessage", {'chat_id' : adminid, 'text' : "Fetching " + multi + " timedout."})
 										else:
 											return posts['urls']
 							else:
-								requests.get("https://api.telegram.org/bot" + botkey + "/sendMessage", {chat_id : adminid, text : "Fetching " + multi + " timedout."})
+								requests.get("https://api.telegram.org/bot" + botkey + "/sendMessage", {'chat_id' : adminid, 'text' : "Fetching " + multi + " timedout."})
 					else:
-						requests.get("https://api.telegram.org/bot" + botkey + "/sendMessage", {chat_id : adminid, text : "Fetching " + multi + " timedout."})
+						requests.get("https://api.telegram.org/bot" + botkey + "/sendMessage", {'chat_id' : adminid, 'text' : "Fetching " + multi + " timedout."})
 			else:
-				requests.get("https://api.telegram.org/bot" + botkey + "/sendMessage", {chat_id : adminid, text : "Fetching " + multi + " timedout."})
+				requests.get("https://api.telegram.org/bot" + botkey + "/sendMessage", {'chat_id' : adminid, 'text' : "Fetching " + multi + " timedout."})
 	else:
-		requests.get("https://api.telegram.org/bot" + botkey + "/sendMessage", {chat_id : adminid, text : "Fetching " + multi + " timedout."})
+		requests.get("https://api.telegram.org/bot" + botkey + "/sendMessage", {'chat_id' : adminid, 'text' : "Fetching " + multi + " timedout."})
 
 
 def postMulti(multi, channel, max_posts):
 	urls = fetchMulti(multi, max_posts)
-	requests.get("https://api.telegram.org/bot" + botkey + "/sendMessage", {chat_id : adminid, text : "Fetching " + str(max_posts) + " posts for " + channel})
+	requests.get("https://api.telegram.org/bot" + botkey + "/sendMessage", {'chat_id' : adminid, 'text' : "Fetching " + str(max_posts) + " posts for " + channel})
 	send_album(channel, urls)
+
 
 
 
