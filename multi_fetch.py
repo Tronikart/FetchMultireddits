@@ -149,7 +149,7 @@ def fetchMulti(multi, max_posts):
 									break
 							# Hot top
 							###################
-							request = handleRedditRequest(url)
+							request = handleRedditRequest(url + '.json')
 							if not request['timeout']:
 								# First go through
 								posts = go_through_posts(request, max_posts)
